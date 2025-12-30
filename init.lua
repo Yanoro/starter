@@ -21,9 +21,15 @@ require("lazy").setup({
     branch = "v2.5",
     import = "nvchad.plugins",
   },
-
+  {
+    "windwp/nvim-autopairs",
+    opts = {
+      map_bs = false,
+    },
+  },
   { import = "plugins" },
 }, lazy_config)
+
 
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")

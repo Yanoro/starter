@@ -11,4 +11,4 @@ map("v", "<leader>/", "<Nop>", { desc = "Disabled default comment" })
 -- Visual Mode
 map("v", "<leader>l", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", {
   desc = "Comment toggle"
-}
+})

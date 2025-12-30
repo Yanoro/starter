@@ -1,3 +1,16 @@
+local autocmd = vim.api.nvim_create_autocmd
+
+-- Open nvim-tree on startup
+autocmd("VimEnter", {
+  callback = function()
+    require("nvim-tree.api").tree.toggle({ 
+      focus = false,
+      find_file = true,
+    }) 
+    
+  end,
+})
+
 return {
   {
     "stevearc/conform.nvim",
