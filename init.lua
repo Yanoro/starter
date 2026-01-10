@@ -27,6 +27,28 @@ require("lazy").setup({
       map_bs = false,
     },
   },
+
+  {
+    "stevearc/overseer.nvim",
+    commit = "68a2d344", -- NvChad often pins versions, check your config
+    opts = {
+      task_list = {
+        -- direction is managed by edgy.nvim
+        min_height = 25,
+        min_width = 25,
+      },
+      component_aliases = {
+        default = {
+          { "display_duration", detail_level = 2 },
+          "on_output_summarize",
+          "on_exit_set_status",
+          -- "on_complete_notify",
+          { "on_complete_dispose", timeout = 300 },
+        },
+      },
+    },
+  },
+
   { import = "plugins" },
 }, lazy_config)
 

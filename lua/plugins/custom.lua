@@ -61,15 +61,74 @@ return {
     "NeogitOrg/neogit",
     lazy = true,
     dependencies = {
-      "nvim-lua/plenary.nvim",         
-      "sindrets/diffview.nvim",       
-
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
       "nvim-telescope/telescope.nvim", -- optional
     },
     cmd = "Neogit",
+    opts = {
+      kind = "replace",
+      commit_popup = {
+        kind = "replace",
+      },
+      popup = {
+        kind = "replace",
+      },
+    },
     keys = {
       { "<leader>gn", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
     }
-  }
+  },
+  {
+    "Civitasv/cmake-tools.nvim",
+    lazy = false, -- Load on startup so it can detect CMakeLists.txt
+    opts = {},
+  },
+
+  {
+    "Zeioth/compiler.nvim",
+    cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+    dependencies = { "stevearc/overseer.nvim" },
+    config = function(_, opts)
+      require("compiler").setup(opts)
+    end,
+  },
+  {
+    "folke/edgy.nvim",
+    lazy = false,
+    init = function()
+      vim.opt.laststatus = 3
+      vim.opt.splitkeep = "screen"
+    end,
+    opts = {
+      bottom = {
+        -- toggleterm / trouble / qf etc
+      },
+      left = {
+        {
+          ft = "NvimTree",
+          title = "NvimTree",
+          size = { width = 60 },
+          filter = function(buf)
+             return vim.bo[buf].filetype == "NvimTree"
+          end,
+        },
+        {
+          ft = "OverseerList",
+          title = "Overseer",
+          size = { width = 60 },
+        },
+        {
+          title = "Overseer Output",
+          ft = "OverseerOutput",
+          size = { width = 60 },
+          filter = function(buf)
+            local ft = vim.bo[buf].filetype
+            return ft == "OverseerOutput"
+          end,
+        },
+      },
+    },
+  },
 
 }
