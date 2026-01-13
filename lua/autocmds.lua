@@ -20,3 +20,13 @@ vim.api.nvim_create_user_command('EditConfig', function()
   vim.cmd('GeminiStart')
 end, {})
 
+-- Prevent auto-insert mode when entering terminal buffers (fixes gemini-cli focus issue)
+vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
+  pattern = "term://*",
+  callback = function()
+    vim.schedule(function()
+      vim.cmd("stopinsert")
+    end)
+  end,
+})
+

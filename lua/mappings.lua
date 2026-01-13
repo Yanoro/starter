@@ -1,7 +1,6 @@
 require "nvchad.mappings"
 local map = vim.keymap.set
 
-map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
 -- 0. Disable the old default mapping
@@ -23,4 +22,25 @@ map("n", "<leader>co", "<cmd>CompilerOpen<cr>", { desc = "Open Compiler" })
 map("n", "<leader>cr", "<cmd>CompilerRedo<cr>", { desc = "Redo Last Task" })
 map("n", "<leader>ct", "<cmd>CompilerToggleResults<cr>", { desc = "Toggle Results" })
 
+ -- Custom function to move and preserve indentation from previous non-blank line
+local function move_indent(direction)
+  return function()
+    -- Move 'j' (down) or 'k' (up)
+    vim.cmd('normal! ' .. direction)
 
+    -- Find the line number of the previous non-blank line
+    local prev_line = vim.fn.prevnonblank(vim.fn.line('.'))
+
+    -- If we found a valid line, move cursor to that indentation level
+    if prev_line > 0 then
+      local indent = vim.fn.indent(prev_line)
+      -- 'virtcol' might be better if using tabs, but 'indent' is safer for spaces
+      vim.fn.cursor(0, indent + 1) -- +1 because Lua is 1-indexed for columns often, but check
+
+    end
+  end
+end
+
+-- Map j and k
+map("n", "j", move_indent("j"), { desc = "Move down and match indent" })
+map("n", "k", move_indent("k"), { desc = "Move up and match indent" }) 

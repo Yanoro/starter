@@ -52,6 +52,22 @@ return {
     config = true,
   },
   {
+    "ggandor/leap.nvim",
+    lazy = false,
+    config = function()
+      require('leap').add_default_mappings()
+    end,
+  },
+  {
+    "rhysd/clever-f.vim",
+    lazy = false,
+    init = function()
+      vim.g.clever_f_ignore_case = 1
+      vim.g.clever_f_smart_case = 1
+      vim.g.clever_f_across_no_line = 1
+    end,
+  },
+  {
     "numToStr/Comment.nvim",
     config = function()
       require("Comment").setup()
@@ -85,6 +101,17 @@ return {
     opts = {},
   },
 
+  {
+    "stevearc/overseer.nvim",
+    opts = {
+      task_list = {
+        direction = "bottom",
+        min_height = 25,
+        max_height = 25,
+        default_detail = 1,
+      },
+    },
+  },
   {
     "Zeioth/compiler.nvim",
     cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
