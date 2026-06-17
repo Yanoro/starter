@@ -15,6 +15,14 @@ return {
     end,
   },
 
+  {
+    "nvim-tree/nvim-tree.lua",
+    enabled = false,
+  },
+
+  { "nvzone/volt", lazy = true },
+  { "nvzone/menu", lazy = true },
+
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
 

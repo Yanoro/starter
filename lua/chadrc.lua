@@ -6,7 +6,7 @@
 local M = {}
 
 M.base46 = {
-  theme = "bearded-arc",
+  theme = "gruvbox",
   transparency = true,
 
   -- hl_override = {
@@ -16,6 +16,9 @@ M.base46 = {
 }
 M.mappings = {
   disabled = {
+    n = {
+      ["<C-n>"] = "",
+    },
     i = {
       ["<C-h>"] = "",
     },
