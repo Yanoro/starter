@@ -43,6 +43,28 @@ local function open_gemini_layout(callback)
   attempt_layout(50) -- Wait up to 5 seconds
 end
 
+local function get_rightmost_non_terminal_window()
+  local windows = vim.api.nvim_list_wins()
+  local rightmost_win = nil
+  local max_col = -1
+
+  for _, win in ipairs(windows) do
+    local bufnr = vim.api.nvim_win_get_buf(win)
+    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+    local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+
+    if buftype ~= "terminal" and ft ~= "CHADTree" and ft ~= "NvimTree" then
+      local pos = vim.api.nvim_win_get_position(win)
+      local col = pos[2]
+      if col > max_col then
+        max_col = col
+        rightmost_win = win
+      end
+    end
+  end
+  return rightmost_win
+end
+
 -- Custom command to open Gemini CLI layout
 vim.api.nvim_create_user_command("CodeEditingStart", function(opts)
   local args = opts.fargs
@@ -67,7 +89,11 @@ vim.api.nvim_create_user_command("CodeEditingStart", function(opts)
   vim.cmd("wincmd H")
   vim.cmd("vertical resize 70")
   vim.cmd("split")
-  vim.cmd("terminal")
+  vim.cmd("enew")
+  local ok, _ = pcall(vim.fn.termopen, "gemini --sandbox --yolo", { cwd = "../AIRogueAgent" })
+  if not ok then
+    vim.fn.termopen("gemini --sandbox --yolo")
+  end
   vim.cmd("wincmd l")
 
   if target_file then
@@ -112,6 +138,18 @@ vim.api.nvim_create_user_command("CodeEditingStart", function(opts)
     add_context_files(50) -- Try for 10 seconds
   end
 
+  -- Open a generic terminal below the rightmost code window
+  local rightmost_code_win = get_rightmost_non_terminal_window()
+  if rightmost_code_win then
+    local original_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(rightmost_code_win)
+    vim.cmd("split")
+    local term_height = math.floor(vim.o.lines * 0.20)
+    vim.cmd("resize " .. term_height)
+    vim.cmd("terminal")
+    -- and return to the original window
+    vim.api.nvim_set_current_win(original_win)
+  end
 end, { nargs = '+' })
 
 -- Custom command to open Gemini CLI in sidebar only
